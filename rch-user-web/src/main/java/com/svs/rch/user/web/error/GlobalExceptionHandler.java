@@ -1,20 +1,19 @@
 package com.svs.rch.user.web.error;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-import java.util.function.Consumer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.svs.rch.user.web.beans.GenericResponse;
 
 @ControllerAdvice(basePackages = "com.svs.rch.user.web.controller")
 public class GlobalExceptionHandler {
@@ -24,27 +23,36 @@ public class GlobalExceptionHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+	private static final Long INPUT_VALIDATION_ERROR = 1001L;
+	private static final Long INPUT_UNKNOWN_ERROR = 1002L;
+	private static final Long SERVER_INTERNAL_ERROR = 9001L;
+
 	@ExceptionHandler(value = MethodArgumentNotValidException.class)
 	@ResponseBody
-	public Object handleRequestValidationException(MethodArgumentNotValidException mae, Locale locale) {
-
-		Map<String, String> errorMap = new HashMap<>();
+	public GenericResponse<ErrorBean> handleRequestValidationException(MethodArgumentNotValidException mae,
+			Locale locale) {
 
 		FieldError fieldError = mae.getBindingResult().getFieldError();
 		if (fieldError != null) {
-			errorMap.put("errorMessage", messageSource.getMessage(fieldError.getDefaultMessage(), null, locale));
+			return GenericResponse.ofError(ErrorBean.builder().code(INPUT_VALIDATION_ERROR)
+					.message(messageSource.getMessage(fieldError.getDefaultMessage(), null, locale)).build());
 		} else {
-			errorMap.put("errorMessage", mae.getMessage());
+			return GenericResponse
+					.ofError(ErrorBean.builder().code(INPUT_UNKNOWN_ERROR).message(mae.getMessage()).build());
+
 		}
-		return errorMap;
+
 	}
 
 	@ExceptionHandler(value = Exception.class)
-	public Object handleRequestValidationException(Exception e) {
+	public ResponseEntity<GenericResponse<ErrorBean>> handleServerProcessingException(Exception e, Locale locale) {
 
 		logger.error("Caught exception", e);
-		Map<String, String> errorMap = new HashMap<>();
-		errorMap.put("errorMessage", e.getMessage());
-		return errorMap;
+
+		ResponseEntity<GenericResponse<ErrorBean>> re = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.body(GenericResponse.ofError(ErrorBean.builder().code(SERVER_INTERNAL_ERROR)
+						.message(messageSource.getMessage("server.internal.error", null, locale)).build()));
+
+		return re;
 	}
 }
