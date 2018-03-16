@@ -38,11 +38,11 @@ public class UserRegisterForm {
 	private String password;
 
 	@Size(message = "firstName.length.error", max = Constants.NAME_MAX_LENGTH)
-	@NotNull(message = "firstName.length.error")
+	@NotNull(message = "firstName.null.error")
 	private String firstName;
 
 	@Size(message = "lastName.length.error", max = Constants.NAME_MAX_LENGTH)
-	@NotNull(message = "lastName.length.error")
+	@NotNull(message = "lastName.null.error")
 	private String lastName;
 
 	@Pattern(message = "mobileNo.pattern.error", regexp = Constants.MOBILENO_PATTERN)

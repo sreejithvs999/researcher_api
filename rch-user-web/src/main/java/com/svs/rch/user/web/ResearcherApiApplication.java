@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 @Configuration
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages="com.svs.rch.user")
 public class ResearcherApiApplication {
 
 	public static void main(String[] args) {
