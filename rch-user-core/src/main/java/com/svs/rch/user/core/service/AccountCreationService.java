@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.svs.rch.user.core.beans.RchUserBean;
+import com.svs.rch.user.core.common.RchUserUtils;
 import com.svs.rch.user.core.dao.UserBaseDao;
 import com.svs.rch.user.core.dbo.UserBase;
 import com.svs.rch.user.core.dbo.UserStatusEnum;
@@ -24,6 +25,9 @@ public class AccountCreationService {
 
 	@Autowired
 	private UserBaseDao userBaseDao;
+
+	@Autowired
+	private CacheService cacheService;
 
 	@Autowired
 	private EmailService emailService;
@@ -85,12 +89,14 @@ public class AccountCreationService {
 
 	public void sendConfirmEmailNotification(RchUserBean userBean) {
 
-		String text = "Hi " + userBean.getFirstName() + " " + userBean.getLastName() + ", \r\n<br/>"
-				+ "An account has been created for Researcher User with this mail id"
-				+ " Please confirm your email Id with the below code. \r\n<br/>" + "1234\r\n<br/>" + "Thanks, \r\n<br/>"
+		String otp = RchUserUtils.generateRandomOTP();
+		cacheService.putInOtpCache(userBean.getUserId(), otp);
+
+		String text = "<span style='color:green;'>Hi </span><span style='color: green; font-weight: bold'>" + userBean.getFirstName() + "</span> <br/> " + userBean.getLastName() + ", \r\n"
+				+ "An account has been created for Researcher User with this mail id. <br/>"
+				+ " Please confirm your email Id with the below code. <br/> <div style='font-size: 13pt;'>" + otp + "</div> \r\n" + " <br/> Thanks, <br/>"
 				+ "Researcher Team";
-		emailService.sendSimpleText(userBean.getEmailId(), "jean.dieux2020@gmail.com", "jean.dieux2020@gmail.com",
-				"Researcher user account confirmation", text);
+		emailService.sendSimpleText(userBean.getEmailId(), "Researcher user account confirmation", text);
 
 	}
 }
