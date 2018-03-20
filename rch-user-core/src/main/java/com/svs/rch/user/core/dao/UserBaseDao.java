@@ -28,15 +28,10 @@ public class UserBaseDao {
 				.setParameter("emailId", emailId).getResultList();
 	}
 
-	public List<UserBase> getUserBaseListByMobileNo(String mobileNo) {
+	public List<UserBase> getNewUserBaseByEmailId(String emailId) {
 
-		return entityManager.createNamedQuery("getUserBaseListByMobileNo", UserBase.class)
-				.setParameter("mobileNo", mobileNo).getResultList();
-	}
-
-	public void deleteNewAccountsFor(String emailId, String mobileNo) {
-		entityManager.createNamedQuery("deleteUserBasePreCreate").setParameter("emailId", emailId)
-				.setParameter("mobileNo", mobileNo).setParameter("userStatus", UserStatusEnum.NEW).executeUpdate();
+		return entityManager.createNamedQuery("getUserBaseByEmailId$UserStatus", UserBase.class)
+				.setParameter("emailId", emailId).setParameter("userStatus", UserStatusEnum.NEW).getResultList();
 	}
 
 	public UserBase saveUserBase(UserBase userBase) {

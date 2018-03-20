@@ -8,10 +8,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.svs.rch.user.web.appservice.UserRegistrationService;
 import com.svs.rch.user.web.beans.GenericResponse;
+import com.svs.rch.user.web.beans.UserEmailActivateForm;
 import com.svs.rch.user.web.beans.UserRegisterForm;
 import com.svs.rch.user.web.beans.UserRegisterResponse;
 
@@ -35,5 +37,14 @@ public class UserController {
 		logger.info("register user controller.");
 
 		return GenericResponse.ofPayload(userRegService.registerUser(registerForm));
+	}
+
+	@RequestMapping(value = "/activate/email", method = RequestMethod.POST)
+	public GenericResponse<UserRegisterResponse> activateEmailByOTP(
+			@Validated @RequestBody UserEmailActivateForm emailActivateForm) {
+
+		logger.info("email activate by otp. ");
+
+		return GenericResponse.ofPayload(userRegService.activateEmailByOTP(emailActivateForm));
 	}
 }

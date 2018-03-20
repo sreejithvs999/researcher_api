@@ -23,8 +23,7 @@ import lombok.Setter;
 @Table(name = "rch_user_base")
 @NamedQueries({
 		@NamedQuery(name = "getUserBaseListByEmailId", query = "select ub from UserBase ub where ub.emailId =:emailId"),
-		@NamedQuery(name = "getUserBaseListByMobileNo", query = "select ub from UserBase ub where ub.mobileNo =:mobileNo"),
-		@NamedQuery(name = "deleteUserBasePreCreate", query = "delete from UserBase ub where ub.emailId=:emailId and ub.mobileNo=:mobileNo and ub.userStatus=:userStatus") })
+		@NamedQuery(name = "getUserBaseByEmailId$UserStatus", query = "select ub from UserBase ub where ub.emailId =:emailId and ub.userStatus=:userStatus") })
 
 @Getter
 @Setter

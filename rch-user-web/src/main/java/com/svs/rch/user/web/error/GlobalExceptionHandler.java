@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.svs.rch.user.core.exception.RchUserException;
 import com.svs.rch.user.web.beans.GenericResponse;
 
 @ControllerAdvice(basePackages = "com.svs.rch.user.web.controller")
@@ -57,8 +58,19 @@ public class GlobalExceptionHandler {
 
 		return re;
 	}
-	
-	
+
+	@ExceptionHandler(value = RchUserException.class)
+	public ResponseEntity<GenericResponse<ErrorBean>> handleRchUserException(RchUserException e, Locale locale) {
+
+		logger.error("Caught RchUserException", e.getMessage());
+
+		ResponseEntity<GenericResponse<ErrorBean>> re = ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(GenericResponse.ofError(
+						ErrorBean.builder().code(e.getErrorCode().longValue()).message(e.getErrorText()).build()));
+
+		return re;
+	}
+
 	@ExceptionHandler(value = HttpMessageConversionException.class)
 	public ResponseEntity<GenericResponse<ErrorBean>> handleException(HttpMessageConversionException e, Locale locale) {
 

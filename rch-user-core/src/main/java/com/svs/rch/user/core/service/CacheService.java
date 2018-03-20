@@ -4,15 +4,20 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.svs.rch.user.core.beans.UserOTP;
 
 @Service
 public class CacheService {
 
-	Cache<Long, String> otpCache;
+	private static Logger log = LoggerFactory.getLogger(CacheService.class);
+
+	private Cache<Long, UserOTP> otpCache;
 
 	@PostConstruct
 	public void init() {
@@ -20,11 +25,15 @@ public class CacheService {
 
 	}
 
-	public void putInOtpCache(Long key, String otp) {
+	public void putInOtpCache(Long key, UserOTP otp) {
+
+		log.info("Saving in cache : key={}, otp={}", key, otp);
 		otpCache.put(key, otp);
 	}
 
-	public String readFromOtpCache(Long key) {
+	public UserOTP readFromOtpCache(Long key) {
+
+		log.info("Reading from cache : key={}", key);
 		return otpCache.getIfPresent(key);
 	}
 }

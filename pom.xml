@@ -25,7 +25,6 @@
 	<modules>
 		<module>rch-user-core</module>
 		<module>rch-user-web</module>
-    <module>rch-notification</module>
   </modules>
 
 	<dependencies>

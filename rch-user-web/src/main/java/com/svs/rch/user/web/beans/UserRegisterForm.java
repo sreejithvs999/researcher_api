@@ -46,7 +46,6 @@ public class UserRegisterForm {
 	private String lastName;
 
 	@Pattern(message = "mobileNo.pattern.error", regexp = Constants.MOBILENO_PATTERN)
-	@NotNull(message = "mobileNo.pattern.error")
 	private String mobileNo;
 
 	@JsonSerialize(using = LocalDateSerializer.class)
@@ -60,5 +59,6 @@ public class UserRegisterForm {
 		return (birthDate == null || birthDate.isAfter(LocalDate.now().minusYears(13))
 				|| birthDate.isBefore(LocalDate.now().minusYears(100)));
 	}
+
 
 }

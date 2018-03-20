@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.svs.rch.user.core.beans.RchUserBean;
 import com.svs.rch.user.core.service.AccountCreationService;
+import com.svs.rch.user.web.beans.UserEmailActivateForm;
 import com.svs.rch.user.web.beans.UserRegisterForm;
 import com.svs.rch.user.web.beans.UserRegisterResponse;
 
@@ -27,8 +28,15 @@ public class UserRegistrationService {
 		userBean = accountCreationService.createUserAccount(userBean);
 
 		accountCreationService.sendConfirmEmailNotification(userBean);
-		
+
 		return UserRegisterResponse.builder().userId(userBean.getUserId()).build();
 	}
 
+	public UserRegisterResponse activateEmailByOTP(UserEmailActivateForm form) {
+
+		RchUserBean userBean = accountCreationService.activateEmailByOTP(form.getEmailId(), form.getOtp());
+		accountCreationService.sendEmailActivatedNotification(userBean);
+
+		return UserRegisterResponse.builder().userId(userBean.getUserId()).build();
+	}
 }
