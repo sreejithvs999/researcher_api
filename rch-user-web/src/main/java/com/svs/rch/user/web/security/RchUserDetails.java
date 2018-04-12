@@ -64,4 +64,7 @@ public class RchUserDetails implements UserDetails {
 		return true;
 	}
 
+	public RchUserBean getUserBean() {
+		return userBean;
+	}
 }

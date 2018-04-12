@@ -30,7 +30,8 @@ public class AccountAuthService {
 		userBean.setLastName(source.getLastName());
 		userBean.setMobileNo(source.getMobileNo());
 		userBean.setStatus(source.getUserStatus().ordinal());
-
+		userBean.setUserId(source.getUserId());
+		userBean.setBirthDate(source.getBirthDate());
 		return userBean;
 
 	}
