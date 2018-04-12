@@ -41,4 +41,8 @@ public class UserBaseDao {
 		return userBase;
 	}
 
+	public List<UserBase> getActiveUserBase(String emailId) {
+		return entityManager.createNamedQuery("getUserBaseByEmailId$UserStatus", UserBase.class)
+				.setParameter("emailId", emailId).setParameter("userStatus", UserStatusEnum.ACTIVE).getResultList();
+	}
 }

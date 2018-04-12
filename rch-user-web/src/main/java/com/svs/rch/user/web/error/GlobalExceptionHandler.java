@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = HttpMessageConversionException.class)
 	public ResponseEntity<GenericResponse<ErrorBean>> handleException(HttpMessageConversionException e, Locale locale) {
 
-		logger.error("Caught exception", e);
+		logger.error("Caught HttpMessageConversionException", e);
 
 		ResponseEntity<GenericResponse<ErrorBean>> re = ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(GenericResponse.ofError(ErrorBean.builder().code(INPUT_MESSAGE_ERROR)
