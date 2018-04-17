@@ -1,5 +1,7 @@
 package com.svs.rch.user.web.security;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +12,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 /**
  * Configurations for authenticating users/ client apps and generating tokens.
@@ -28,6 +31,9 @@ public class RchAuthorizationServerConfig extends AuthorizationServerConfigurerA
 	@Autowired
 	UserDetailsService userDetailsService;
 
+	@Autowired
+	DataSource dataSource;
+	
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
@@ -37,7 +43,7 @@ public class RchAuthorizationServerConfig extends AuthorizationServerConfigurerA
 		clients.inMemory().withClient("rch-user-client")
 				.secret("$2a$10$SCt4wPc0iBjjpycx97Vwo.KV7vsilLHDvqWK0ffTv9O2IqteoJqwW")
 				.authorizedGrantTypes("password", "refresh_token", "implicit").scopes("all")
-				.accessTokenValiditySeconds(60 * 60 * 3).refreshTokenValiditySeconds(60 * 60 * 24);
+				.accessTokenValiditySeconds(60 * 60 * 24).refreshTokenValiditySeconds(60 * 60 * 24 * 3);
 	}
 
 	@Override
@@ -55,7 +61,7 @@ public class RchAuthorizationServerConfig extends AuthorizationServerConfigurerA
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
-		endpoints.authenticationManager(authenticationManager);
+		endpoints.authenticationManager(authenticationManager).tokenStore(new JdbcTokenStore(dataSource));
 	}
 
 }
