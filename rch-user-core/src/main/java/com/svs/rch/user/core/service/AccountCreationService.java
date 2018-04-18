@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.svs.rch.user.core.beans.RchUserBean;
 import com.svs.rch.user.core.beans.UserOTP;
 import com.svs.rch.user.core.common.RchUserUtils;
@@ -79,12 +78,7 @@ public class AccountCreationService {
 		String otp = RchUserUtils.generateRandomOTP();
 		cacheService.putInOtpCache(userBean.getUserId(), new UserOTP(otp));
 
-		String text = "<span style='color:green;'>Hi </span><span style='color: green; font-weight: bold'>"
-				+ userBean.getFirstName() + "</span> <br/> " + userBean.getLastName() + ", \r\n"
-				+ "An account has been created for Researcher User with this mail id. <br/>"
-				+ " Please confirm your email Id with the below code. <br/> <div style='font-size: 14pt;'>" + otp
-				+ "</div> \r\n" + " <br/> Thanks, <br/>" + "Researcher Team";
-		emailService.sendSimpleText(userBean.getEmailId(), "Researcher user account confirmation", text);
+		emailService.sendAccountActivatedEmail(userBean, otp);
 
 	}
 
@@ -135,12 +129,7 @@ public class AccountCreationService {
 
 	public void sendEmailActivatedNotification(RchUserBean userBean) {
 
-		String text = "<span style='color:green;'>Hi </span><span style='color: green; font-weight: bold'>"
-				+ userBean.getFirstName() + "</span> <br/> " + userBean.getLastName() + ", \r\n"
-				+ "Your account has been successfully activated with this mail id. <br/>"
-				+ "You are now able to access the app. <br/> <div style='font-size: 13pt;'>" + " <br/> Thanks, <br/>"
-				+ "Researcher Team";
-		emailService.sendSimpleText(userBean.getEmailId(), "Researcher user account activated.", text);
+		emailService.sendConfirmAccountEmail(userBean);
 
 	}
 }

@@ -10,9 +10,12 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+
+import com.svs.rch.user.core.beans.RchUserBean;
 
 @Service
 public class EmailService implements InitializingBean {
@@ -30,29 +33,23 @@ public class EmailService implements InitializingBean {
 	@Autowired
 	private TaskExecutor taskExecutor;
 
-	public void sendSimpleText(String to, String subject, String text) {
+	@Autowired
+	private SpringTemplateEngine emailTemplatesEng;
 
-		taskExecutor.execute(new Runnable() {
+	private void sendSimpleText(String to, String subject, String text) {
 
-			@Override
-			public void run() {
+		try {
+			MimeMessage msg = mailSender.createMimeMessage();
 
-				try {
-					MimeMessage msg = mailSender.createMimeMessage();
-
-					msg.setRecipient(RecipientType.TO, new InternetAddress(to));
-					msg.setFrom(new InternetAddress(emailFromId));					
-					msg.setSubject(subject);
-					msg.setContent(text, "text/html");
-					mailSender.send(msg);
-					log.info("Sent simple text mail");
-				} catch (Exception e) {
-					log.error("Sent simple text mail", e);
-				}
-
-			}
-		});
-
+			msg.setRecipient(RecipientType.TO, new InternetAddress(to));
+			msg.setFrom(new InternetAddress(emailFromId));
+			msg.setSubject(subject);
+			msg.setContent(text, "text/html");
+			mailSender.send(msg);
+			log.info("Sent simple text mail");
+		} catch (Exception e) {
+			log.error("Sent simple text mail", e);
+		}
 	}
 
 	@Override
@@ -60,4 +57,27 @@ public class EmailService implements InitializingBean {
 		emailFromId = env.getProperty("mail.username");
 	}
 
+	private void sendWithTemplate(String to, String subject, String templateName, Context ctx) {
+		taskExecutor.execute(() -> {
+			String text = emailTemplatesEng.process(templateName, ctx);
+			sendSimpleText(to, subject, text);
+		});
+	}
+
+	public void sendConfirmAccountEmail(RchUserBean userBean) {
+
+		Context ctx = new Context();
+		ctx.setVariable("firstName", userBean.getFirstName());
+		ctx.setVariable("lastName", userBean.getLastName());
+		sendWithTemplate(userBean.getEmailId(), "Researcher App - Account activated", "email-confirm", ctx);
+	}
+
+	public void sendAccountActivatedEmail(RchUserBean userBean, String otp) {
+		
+		Context ctx = new Context();
+		ctx.setVariable("firstName", userBean.getFirstName());
+		ctx.setVariable("lastName", userBean.getLastName());
+		ctx.setVariable("otpCode", otp);
+		sendWithTemplate(userBean.getEmailId(), "Researcher App - Confirm Email Id", "registration-otp", ctx);
+	}
 }

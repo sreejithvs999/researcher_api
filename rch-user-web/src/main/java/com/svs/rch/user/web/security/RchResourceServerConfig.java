@@ -44,7 +44,7 @@ public class RchResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 		Assert.notNull(oauthClientProcFilter, "oauthClientProcFilter must not be null");
 
-		http.authorizeRequests().antMatchers("/user/register", "/activate/email", "/user/login").permitAll()
+		http.authorizeRequests().antMatchers("/user/register", "/user/activate/email", "/user/login").permitAll()
 				.antMatchers("/user/**").authenticated().and()
 				.addFilterBefore(oauthClientProcFilter, BasicAuthenticationFilter.class);
 

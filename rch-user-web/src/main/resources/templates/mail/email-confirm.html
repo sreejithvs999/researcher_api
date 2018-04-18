@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Researcher App - Confirm Email Id</title>
+<style type="text/css">
+span {
+	font-family: arial,sans-serif;
+	font-size: 10pt;
+	color: #754532;
+	margin-bottom: 3pt;
+}
+
+span.first-name, span.last-name {
+	font-weight: bold;
+}
+
+.greeting-area, .message-area, .thanks-area {
+	margin-top: 2em;
+	margin-left: 3em;
+	
+}
+.message-area span {
+	display: block;
+}
+.message-ignore {
+	font-weight: 600;
+}
+.message-otp-code {
+	display: block;
+	font-size: 15pt;
+	font-family: areal;
+	font-weight: bolder;
+	color: #777777;
+	margin: 1em;
+}
+.thanks-area span {
+	display: block;
+}
+.thanks-area span a{
+	color: #6691ab;
+	text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+	<div>
+				
+		<div class="greeting-area">
+			<span> Hi</span> <span class="first-name" th:text="${firstName}">Johann</span>
+			<span class="last-name" th:text="${lastName}"> Bobb</span>
+		</div>
+		<div class="message-area">
+			<span class="message-inform">Your Research App account has been successfully activated using this mail id.</span> 
+			<span class="message-action">Now you can login to Researcher App using your email id and password.</span>
+
+		</div>
+		<div class="thanks-area">
+			<span>Thanks, </span> <span class="research-team-title">Researcher Team</span>
+			<span class="research-team-link"><a href="http://www.researcherapp.clouds.aws.com">www.researcherapp.com</a></span>
+			
+		</div>
+
+
+	</div>
+</body>
+</html>

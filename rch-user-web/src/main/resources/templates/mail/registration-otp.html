@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Researcher App - Account activated</title>
+<style type="text/css">
+span {
+	font-family: arial,sans-serif;
+	font-size: 10pt;
+	color: #754532;
+	margin-bottom: 3pt;
+}
+
+span.first-name, span.last-name {
+	font-weight: bold;
+}
+
+.greeting-area, .message-area, .thanks-area {
+	margin-top: 2em;
+	margin-left: 3em;
+	
+}
+.message-area span {
+	display: block;
+}
+.message-ignore {
+	font-weight: 600;
+}
+.message-otp-code {
+	display: block;
+	font-size: 15pt;
+	font-family: areal;
+	font-weight: bolder;
+	color: #777777;
+	margin: 1em;
+}
+.thanks-area span {
+	display: block;
+}
+.thanks-area span a{
+	color: #6691ab;
+	text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+	<div>
+
+		<div class="greeting-area">
+			<span> Hi</span> <span class="first-name" th:text="${firstName}">Johann</span>
+			<span class="last-name" th:text="${lastName}"> Bobb</span>
+		</div>
+		<div class="message-area">
+			<span class="message-inform">An account has been created at 
+				Researcher App portal with this mail id.</span> 
+			<span class="message-action">
+				The OTP generated to confirm the email id is given below. The OTP is valid for 5 minutes only.</span>
+			<span class="message-otp-code" th:text="${otpCode}">8D5Q</span>
+			<span class="message-ignore">
+				Please ignore this mail if you are not aware about the registration.
+			</span>
+		</div>
+		<div class="thanks-area">
+			<span>Thanks, </span> <span class="research-team-title">Researcher Team</span>
+			<span class="research-team-link"><a href="http://www.researcherapp.clouds.aws.com">www.researcherapp.com</a></span>
+			
+		</div>
+
+
+	</div>
+</body>
+</html>
