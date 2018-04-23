@@ -1,4 +1,4 @@
-package com.svs.rch.user.core.service;
+package com.svs.rch.user.core.infra.service;
 
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;

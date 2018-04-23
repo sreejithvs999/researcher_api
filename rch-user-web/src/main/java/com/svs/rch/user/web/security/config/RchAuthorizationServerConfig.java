@@ -1,4 +1,4 @@
-package com.svs.rch.user.web.security;
+package com.svs.rch.user.web.security.config;
 
 import javax.sql.DataSource;
 
@@ -12,7 +12,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import com.svs.rch.user.core.security.RchJwtConverter;
 
 /**
  * Configurations for authenticating users/ client apps and generating tokens.
@@ -33,7 +40,10 @@ public class RchAuthorizationServerConfig extends AuthorizationServerConfigurerA
 
 	@Autowired
 	DataSource dataSource;
-	
+
+	@Autowired
+	RchJwtConverter jwtConverter;
+
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
@@ -61,7 +71,8 @@ public class RchAuthorizationServerConfig extends AuthorizationServerConfigurerA
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
-		endpoints.authenticationManager(authenticationManager).tokenStore(new JdbcTokenStore(dataSource));
+		endpoints.authenticationManager(authenticationManager).tokenStore(new JwtTokenStore(jwtConverter))
+				.tokenEnhancer(jwtConverter);
 	}
 
 }

@@ -19,23 +19,35 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * Profile information of user.
  * 
  * @author Sreejith VS
  *
  */
-@Setter
 @Getter
-public class UserRegisterForm {
+@Setter
+public class ProfileEditForm {
 
-	@Pattern(message = "email.pattern.error", regexp = Constants.EMAIL_PATTERN)
-	@Size(message = "email.length.error", max = Constants.EMAIL_MAX_LENGTH)
-	@NotNull(message = "email.pattern.error")
-	private String emailId;
+	@Size(message = "profile.title.size.error", max = 50)
+	private String title;
 
-	@Pattern(message = "password.pattern.error", regexp = Constants.PASSWORD_PATTERN)
-	@Size(message = "password.length.error", max = Constants.PASSWORD_MAX_LENGTH)
-	@NotNull(message = "password.pattern.error")
-	private String password;
+	@Pattern(message = "profile.gender.error", regexp = "^[MFO]$")
+	private String gender;
+
+	@Size(message = "profile.headtext.size.error", max = 250)
+	private String headText;
+
+	@Size(message = "profile.country.size.error", max = 100)
+	private String country;
+
+	@Size(message = "profile.contactinfo.size.error", max = 2000)
+	private String contactInfo;
+
+	@Size(message = "profile.educationinfo.size.error", max = 2000)
+	private String educationInfo;
+
+	@Size(message = "profile.careerinfo.size.error", max = 2000)
+	private String careerInfo;
 
 	@Size(message = "firstName.length.error", max = Constants.NAME_MAX_LENGTH)
 	@NotNull(message = "firstName.null.error")
@@ -51,7 +63,7 @@ public class UserRegisterForm {
 	@JsonSerialize(using = LocalDateSerializer.class)
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@NotNull(message="birthDate.value.error")
+	@NotNull(message = "birthDate.value.error")
 	private LocalDate birthDate;
 
 	@AssertFalse(message = "birthDate.range.error")
@@ -59,6 +71,4 @@ public class UserRegisterForm {
 		return (birthDate == null || birthDate.isAfter(LocalDate.now().minusYears(13))
 				|| birthDate.isBefore(LocalDate.now().minusYears(100)));
 	}
-
-
 }

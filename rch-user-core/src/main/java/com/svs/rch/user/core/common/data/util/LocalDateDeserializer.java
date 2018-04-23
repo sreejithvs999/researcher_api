@@ -1,4 +1,4 @@
-package com.svs.rch.user.core.common.data;
+package com.svs.rch.user.core.common.data.util;
 
 import java.io.IOException;
 import java.time.LocalDate;

@@ -27,4 +27,9 @@ public class RchUserBean implements Serializable {
 	private LocalDate birthDate;
 
 	private Integer status;
+
+	@Override
+	public String toString() {
+		return super.toString() + " RchUserBean(userId=" + userId + "; emailId=" + emailId + "status=" + status + ")";
+	}
 }

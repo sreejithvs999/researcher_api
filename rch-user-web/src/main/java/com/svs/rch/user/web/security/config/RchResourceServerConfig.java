@@ -1,4 +1,4 @@
-package com.svs.rch.user.web.security;
+package com.svs.rch.user.web.security.config;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.svs.rch.user.web.error;
+package com.svs.rch.user.web.error.bean;
 
 import lombok.Builder;
 import lombok.Getter;

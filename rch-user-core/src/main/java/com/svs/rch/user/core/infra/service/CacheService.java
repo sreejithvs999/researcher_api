@@ -1,4 +1,4 @@
-package com.svs.rch.user.core.service;
+package com.svs.rch.user.core.infra.service;
 
 import java.util.concurrent.TimeUnit;
 

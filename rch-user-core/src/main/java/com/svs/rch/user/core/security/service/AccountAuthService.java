@@ -1,13 +1,17 @@
-package com.svs.rch.user.core.service;
+package com.svs.rch.user.core.security.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
 
 import com.svs.rch.user.core.beans.RchUserBean;
 import com.svs.rch.user.core.dao.UserBaseDao;
 import com.svs.rch.user.core.dbo.UserBase;
+import com.svs.rch.user.core.security.RchUserDetails;
 
 @Service
 public class AccountAuthService {
@@ -33,6 +37,13 @@ public class AccountAuthService {
 		userBean.setUserId(source.getUserId());
 		userBean.setBirthDate(source.getBirthDate());
 		return userBean;
+	}
+	
+	public RchUserBean getLoggedInUser() {
+		Authentication currAuthn = SecurityContextHolder.getContext().getAuthentication();
+		OAuth2Authentication oauth2 = (OAuth2Authentication) currAuthn;
 
+		RchUserDetails userDetails = (RchUserDetails) oauth2.getUserAuthentication().getPrincipal();
+		return userDetails.getUserBean();
 	}
 }

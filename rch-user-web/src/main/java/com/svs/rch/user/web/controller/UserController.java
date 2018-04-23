@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.validation.annotation.Validated;
@@ -19,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.svs.rch.user.core.beans.RchUserBean;
-import com.svs.rch.user.web.appservice.UserRegistrationService;
+import com.svs.rch.user.core.security.RchUserDetails;
+import com.svs.rch.user.web.appservice.UserAppService;
 import com.svs.rch.user.web.beans.GenericResponse;
 import com.svs.rch.user.web.beans.UserEmailActivateForm;
 import com.svs.rch.user.web.beans.UserInfoResponse;
 import com.svs.rch.user.web.beans.UserRegisterForm;
 import com.svs.rch.user.web.beans.UserRegisterResponse;
-import com.svs.rch.user.web.security.RchUserDetails;
 
 /**
  * 
@@ -39,7 +40,7 @@ public class UserController {
 	private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
-	private UserRegistrationService userRegService;
+	private UserAppService userRegService;
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public GenericResponse<UserRegisterResponse> registerWithDetails(
@@ -65,8 +66,11 @@ public class UserController {
 		return GenericResponse.ofPayload(userRegService.getLoggedInUserInfo());
 	}
 
+	@Autowired
+	OAuth2RestOperations restTemplate;
+	
 	@RequestMapping("/login")
-	public Object userLogin(HttpServletRequest request, Authentication principal) {
-		return request.getAttribute(OAuth2AuthenticationDetails.ACCESS_TOKEN_VALUE);
+	public Object userLogin(HttpServletRequest request) {
+		return restTemplate.getAccessToken();
 	}
 }

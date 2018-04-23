@@ -1,4 +1,4 @@
-package com.svs.rch.user.web.security;
+package com.svs.rch.user.core.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.svs.rch.user.core.beans.RchUserBean;
-import com.svs.rch.user.core.service.AccountAuthService;
+import com.svs.rch.user.core.security.RchUserDetails;
 
 @Component
 public class RchUserDetailService implements UserDetailsService {

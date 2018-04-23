@@ -1,5 +1,6 @@
 package com.svs.rch.user.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,7 +31,7 @@ public class ResearcherApiApplication {
 	}
 
 	@Bean(name="emailTemplatesEng")
-	public SpringTemplateEngine springTemplateEngine() {
+	public SpringTemplateEngine springTemplateEngine(@Autowired MessageSource messageSource) {
 		SpringTemplateEngine templateEng = new SpringTemplateEngine();
 		ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
 		templateResolver.setOrder(1);
@@ -38,7 +39,7 @@ public class ResearcherApiApplication {
 		templateResolver.setSuffix(".html");
 		templateResolver.setCharacterEncoding("UTF-8");
 		templateEng.setTemplateResolver(templateResolver);
-		templateEng.setMessageSource(messageSource());
+		templateEng.setMessageSource(messageSource);
 		return templateEng;
 	}
 }

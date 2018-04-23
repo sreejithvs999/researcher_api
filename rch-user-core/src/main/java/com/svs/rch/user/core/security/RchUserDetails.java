@@ -1,4 +1,4 @@
-package com.svs.rch.user.web.security;
+package com.svs.rch.user.core.security;
 
 import java.util.Collection;
 import java.util.Collections;

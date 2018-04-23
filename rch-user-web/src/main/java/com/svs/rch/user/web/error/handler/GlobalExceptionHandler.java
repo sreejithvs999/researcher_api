@@ -1,4 +1,4 @@
-package com.svs.rch.user.web.error;
+package com.svs.rch.user.web.error.handler;
 
 import java.util.Locale;
 import org.slf4j.Logger;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.svs.rch.user.core.exception.RchUserException;
 import com.svs.rch.user.web.beans.GenericResponse;
+import com.svs.rch.user.web.error.bean.ErrorBean;
 
 @ControllerAdvice(basePackages = "com.svs.rch.user.web.controller")
 public class GlobalExceptionHandler {
