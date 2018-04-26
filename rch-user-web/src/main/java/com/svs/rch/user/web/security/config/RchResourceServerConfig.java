@@ -1,5 +1,7 @@
 package com.svs.rch.user.web.security.config;
 
+import java.util.Collections;
+
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +23,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.Assert;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * Configuration for requiring authentication for API end points except
@@ -44,10 +49,23 @@ public class RchResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 		Assert.notNull(oauthClientProcFilter, "oauthClientProcFilter must not be null");
 
-		http.authorizeRequests().antMatchers("/user/register", "/user/activate/email", "/user/login").permitAll()
+		http.cors().configurationSource(corsConfigSource()).and().authorizeRequests()
+				.antMatchers("/user/register", "/user/activate/email", "/user/login").permitAll()
 				.antMatchers("/user/**").authenticated().and()
 				.addFilterBefore(oauthClientProcFilter, BasicAuthenticationFilter.class);
 
+	}
+
+	private CorsConfigurationSource corsConfigSource() {
+
+		UrlBasedCorsConfigurationSource configSrc = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration corsConfig = new CorsConfiguration();
+		corsConfig.setAllowedHeaders(Collections.singletonList("*"));
+		corsConfig.setAllowedMethods(Collections.singletonList("*"));
+		corsConfig.setAllowedOrigins(Collections.singletonList("*"));
+
+		configSrc.registerCorsConfiguration("/**", corsConfig);
+		return configSrc;
 	}
 
 	private OAuth2ClientAuthenticationProcessingFilter oauthClientProcFilter;
